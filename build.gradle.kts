@@ -28,15 +28,23 @@ dependencies {
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-    compileOnly("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-inject-java")
+    implementation("ch.qos.logback:logback-classic:1.2.10") // Logback for logging
+    implementation(kotlin("stdlib"))
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("io.micronaut:micronaut-jackson-databind")
+//    compileOnly("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
     runtimeOnly("com.mysql:mysql-connector-j")
-    testImplementation("io.micronaut:micronaut-http-client")
-    implementation(kotlin("stdlib"))
+//    testImplementation("io.micronaut:micronaut-http-client")
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testImplementation(kotlin("test"))
-    implementation("io.micronaut:micronaut-inject-java")
+    testImplementation("io.micronaut.test:micronaut-test-junit5")
 }
+
 
 application {
     mainClass = "com.mysql.ApplicationKt"
