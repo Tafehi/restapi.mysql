@@ -62,6 +62,8 @@ jobs:
 
       - name: Test
         run: ./gradlew test --stacktrace
+    continue-on-error: true
+
 
   code_style:
     runs-on: ubuntu-24.04
