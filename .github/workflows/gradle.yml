@@ -8,14 +8,15 @@ on:
     branches:
       - main
 
+env:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+  MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+  MYSQL_URL: ${{ secrets.MYSQL_URL }}
+
 jobs:
   compile:
     runs-on: ubuntu-24.04
-    env:
-      GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-      MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
-      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-      MYSQL_URL: ${{ secrets.MYSQL_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -49,11 +50,6 @@ jobs:
   test:
     runs-on: ubuntu-24.04
     needs: compile
-    env:
-      GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-      MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
-      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-      MYSQL_URL: ${{ secrets.MYSQL_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
