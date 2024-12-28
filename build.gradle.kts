@@ -6,6 +6,7 @@ plugins {
     id("io.micronaut.application") version "4.4.4"
     id("io.micronaut.test-resources") version "4.4.4"
     id("io.micronaut.aot") version "4.4.4"
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
 }
 
 version = "0.1"
@@ -63,6 +64,20 @@ micronaut {
         optimizeNetty = true
         replaceLogbackXml = true
     }
+}
+
+
+
+// Add ktlint configuration
+ktlint {
+    android.set(false)
+    outputColorName.set("RED")
+    outputToConsole.set(true)
+    disabledRules.set(setOf("no-wildcard-imports"))
+}
+
+tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask>().configureEach {
+    dependsOn("compileKotlin")
 }
 
 
