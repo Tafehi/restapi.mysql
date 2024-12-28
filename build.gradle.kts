@@ -90,7 +90,7 @@ tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask>().configureE
 
 
 tasks.named<Jar>("jar") {
-    archiveBaseName.set("mysqlRestApi")
+    archiveBaseName.set("mysqlrestapi")
     archiveVersion.set("1.0.0")
     archiveClassifier.set("")
 }
