@@ -5,7 +5,7 @@ FROM openjdk:21-jdk-slim
 WORKDIR /app
 
 # Copy the JAR file from the build context to the working directory
-COPY  build/libs/mysqlRestApi-1.0.0.jar /app/
+COPY  build/libs/mysqlrestapi-1.0.0.jar /app/
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
