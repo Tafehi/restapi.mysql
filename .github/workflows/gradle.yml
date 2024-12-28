@@ -139,9 +139,7 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Push Docker image to GitHub Container Registry
-        run: |
-          lowercase_registry=$(echo "${{ env.GITHUB_REGISTRY }}" | tr '[:upper:]' '[:lower:]')
-          docker push "${lowercase_registry}/mysqlrestapi:latest"
+        run: docker push mysqlRestApi:latest
 
 
   send-to-aws:
