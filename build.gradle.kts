@@ -39,10 +39,10 @@ dependencies {
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
     runtimeOnly("com.mysql:mysql-connector-j")
 //    testImplementation("io.micronaut:micronaut-http-client")
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    testImplementation(kotlin("test"))
-    testImplementation("io.micronaut.test:micronaut-test-junit5")
+//    testImplementation("org.junit.jupiter:junit-jupiter-api")
+//    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+//    testImplementation(kotlin("test"))
+//    testImplementation("io.micronaut.test:micronaut-test-junit5")
 }
 
 
