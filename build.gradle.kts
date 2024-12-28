@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.9.25"
+//    id("org.jetbrains.kotlin.jvm") version "1.9.25"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.9.25"
     id("com.google.devtools.ksp") version "1.9.25-1.0.20"
     id("com.github.johnrengelman.shadow") version "8.1.1"
@@ -7,6 +7,7 @@ plugins {
     id("io.micronaut.test-resources") version "4.4.4"
     id("io.micronaut.aot") version "4.4.4"
     id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
+    kotlin("jvm") version "1.9.0"
 }
 
 version = "0.1"
@@ -80,6 +81,10 @@ tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask>().configureE
 }
 
 
-
+tasks.named<Jar>("jar") {
+    archiveBaseName.set("mysqlRestApi")
+    archiveVersion.set("1.0.0")
+    archiveClassifier.set("")
+}
 
 

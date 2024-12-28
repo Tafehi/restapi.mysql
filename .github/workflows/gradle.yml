@@ -39,14 +39,12 @@ jobs:
       - name: Compile
         run: ./gradlew assemble
 
-      - name: Check inside lib compile
-        run: ls -al build/libs/
 
       - name: Upload JAR
         uses: actions/upload-artifact@v3
         with:
-          name: restApi-*.jar
-          path: build/libs/*.jar
+          name: application
+          path: build/libs/mysqlRestApi-1.0.0.jar
 
   test:
     runs-on: ubuntu-24.04
