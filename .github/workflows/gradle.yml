@@ -7,12 +7,14 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 env:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
   MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
   MYSQL_URL: ${{ secrets.MYSQL_URL }}
+  GITHUB_REGISTRY: ghcr.io/${{ github.repository }}
 
 jobs:
   compile:
@@ -40,7 +42,6 @@ jobs:
       - name: Compile
         run: ./gradlew assemble
 
-
       - name: Upload JAR
         uses: actions/upload-artifact@v3
         with:
@@ -63,7 +64,6 @@ jobs:
       - name: Test
         run: ./gradlew test --stacktrace
     continue-on-error: true
-
 
   code_style:
     runs-on: ubuntu-24.04
@@ -133,29 +133,30 @@ jobs:
           path: build/libs/mysqlRestApi-1.0.0.jar
 
       - name: Build Docker image
-        run: docker build -t application:latest .
+        run: docker build -t mysqlRestApi:latest .
 
-      - name: Tag Docker image
-        run: docker tag application:latest ${{ secrets.AWS_ECR_REGISTRY }}/application:latest
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Login to Amazon ECR
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-
-      - name: Push Docker image to ECR
-        run: |
-          aws ecr get-login-password --region ${{ secrets.AWS_DEFAULT_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_REGISTRY }}
-          docker push ${{ secrets.AWS_ECR_REGISTRY }}/application:latest
+      - name: Push Docker image to GitHub Container Registry
+        run: docker push ${{ env.GITHUB_REGISTRY }}/mysqlRestApi:latest
 
   send-to-aws:
     runs-on: ubuntu-24.04
     needs: dockerize
+    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Pull Docker image from GitHub Container Registry
+        run: docker pull ${{ env.GITHUB_REGISTRY }}/mysqlRestApi:latest
+
+      - name: Tag Docker image for AWS ECR
+        run: docker tag ${{ env.GITHUB_REGISTRY }}/mysqlRestApi:latest ${{ secrets.AWS_ECR_REGISTRY }}/mysqlRestApi:latest
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -169,4 +170,4 @@ jobs:
           aws ecr get-login-password --region ${{ secrets.AWS_DEFAULT_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_REGISTRY }}
 
       - name: Push Docker image to ECR
-        run: docker push ${{ secrets.AWS_ECR_REGISTRY }}/application:latest
+        run: docker push ${{ secrets.AWS_ECR_REGISTRY }}/mysqlRestApi:latest
