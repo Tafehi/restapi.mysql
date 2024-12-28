@@ -37,7 +37,10 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Compile
-        run: ./gradlew --daemon
+        run: ./gradlew assemble
+
+      - name: Check inside lib compile
+        run: ls -al build/libs/
 
       - name: Upload JAR
         uses: actions/upload-artifact@v3
