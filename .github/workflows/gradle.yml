@@ -23,6 +23,7 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
+          distribution: 'adopt' # Specify the JDK distribution
           java-version: '21'
 
       - name: Cache Gradle packages
@@ -48,6 +49,7 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
+          distribution: 'adopt'
           java-version: '21'
 
       - name: Test
@@ -63,6 +65,7 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
+          distribution: 'adopt'
           java-version: '21'
 
       - name: Check Code Style
@@ -84,6 +87,7 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
+          distribution: 'adopt'
           java-version: '21'
 
       - name: Package
