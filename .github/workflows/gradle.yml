@@ -133,7 +133,7 @@ jobs:
           path: build/libs/mysqlrestapi-1.0.0.jar
 
       - name: Build Docker image
-        run: docker build -t mysqlrestapi:latest .
+        run: docker build -t ghcr.io/mysqlrestapi:latest .
 
       - name: Login to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
