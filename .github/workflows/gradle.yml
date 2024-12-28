@@ -1,4 +1,4 @@
-name: API in Kotlin using micronaut
+name: API in Kotlin using Micronaut
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   compile:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       GRADLE_OPTS: "-Dorg.gradle.daemon=false"
       MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
@@ -39,8 +39,14 @@ jobs:
       - name: Compile
         run: ./gradlew --daemon
 
+      - name: Upload JAR
+        uses: actions/upload-artifact@v3
+        with:
+          name: application
+          path: build/libs/*.jar
+
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: compile
     steps:
       - name: Checkout code
@@ -56,7 +62,7 @@ jobs:
         run: ./gradlew test --stacktrace
 
   code_style:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: compile
     steps:
       - name: Checkout code
@@ -79,9 +85,8 @@ jobs:
           path: build/ktlint.xml
     continue-on-error: true
 
-
   package:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       - test
       - code_style
@@ -104,7 +109,7 @@ jobs:
           path: build/libs/*.jar
 
   dockerize:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: package
     services:
       docker:
@@ -123,8 +128,20 @@ jobs:
       - name: Tag Docker image
         run: docker tag application:latest ${{ secrets.AWS_ECR_REGISTRY }}/application:latest
 
+      - name: Login to Amazon ECR
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      - name: Push Docker image to ECR
+        run: |
+          aws ecr get-login-password --region ${{ secrets.AWS_DEFAULT_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_REGISTRY }}
+          docker push ${{ secrets.AWS_ECR_REGISTRY }}/application:latest
+
   send-to-aws:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: dockerize
     steps:
       - name: Checkout code
