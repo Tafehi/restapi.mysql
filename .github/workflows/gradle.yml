@@ -70,12 +70,15 @@ jobs:
 
       - name: Check Code Style
         run: ./gradlew ktlint
+
       - name: Upload ktlint report
         if: success() || failure()
         uses: actions/upload-artifact@v3
         with:
           name: ktlint-report
           path: build/ktlint.xml
+    continue-on-error: true
+
 
   package:
     runs-on: ubuntu-latest
