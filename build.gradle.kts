@@ -12,7 +12,7 @@ plugins {
 version = "0.1"
 group = "com.mysql"
 
-val kotlinVersion=project.properties.get("kotlinVersion")
+val kotlinVersion = project.properties.get("kotlinVersion")
 repositories {
     mavenCentral()
 }
@@ -25,15 +25,17 @@ dependencies {
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     compileOnly("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
     runtimeOnly("com.mysql:mysql-connector-j")
     testImplementation("io.micronaut:micronaut-http-client")
+    implementation(kotlin("stdlib"))
+    testImplementation(kotlin("test"))
+    implementation("io.micronaut:micronaut-inject-java")
 }
-
 
 application {
     mainClass = "com.mysql.ApplicationKt"
@@ -41,7 +43,6 @@ application {
 java {
     sourceCompatibility = JavaVersion.toVersion("21")
 }
-
 
 graalvmNative.toolchainDetection = false
 
@@ -66,8 +67,6 @@ micronaut {
     }
 }
 
-
-
 // Add ktlint configuration
 ktlint {
     android.set(false)
@@ -79,5 +78,8 @@ ktlint {
 tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask>().configureEach {
     dependsOn("compileKotlin")
 }
+
+
+
 
 

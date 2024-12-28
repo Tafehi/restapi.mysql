@@ -69,7 +69,7 @@ jobs:
           java-version: '21'
 
       - name: Check Code Style
-        run: ./gradlew ktlint
+        run: ./gradlew ktlintKotlinScriptFormat
 
       - name: Upload ktlint report
         if: success() || failure()

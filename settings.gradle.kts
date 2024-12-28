@@ -1,4 +1,3 @@
 
 
-rootProject.name="restApi"
-
+rootProject.name = "restApi"
