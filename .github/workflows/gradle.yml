@@ -45,7 +45,7 @@ jobs:
       - name: Upload JAR
         uses: actions/upload-artifact@v3
         with:
-          name: application
+          name: restApi-*.jar
           path: build/libs/*.jar
 
   test:
