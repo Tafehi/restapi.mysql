@@ -112,34 +112,38 @@ jobs:
           name: application
           path: build/libs/mysqlrestapi-1.0.0.jar
 
-  dockerize:
-    runs-on: ubuntu-24.04
-    needs: package
-    services:
-      docker:
-        image: docker:24.0.5
-        options: --privileged
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+dockerize:
+  runs-on: ubuntu-24.04
+  needs: package
+  services:
+    docker:
+      image: docker:24.0.5
+      options: --privileged
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-      - name: Download JAR
-        uses: actions/download-artifact@v3
-        with:
-          name: application
-          path: build/libs/mysqlrestapi-1.0.0.jar
+    - name: Download JAR
+      uses: actions/download-artifact@v3
+      with:
+        name: application
+        path: build/libs/mysqlrestapi-1.0.0.jar
 
-      - name: Build Docker image
-        run: docker build -t ghcr.io/tafehi/mysqlrestapi:latest .
+    - name: Build Docker image
+      run: docker build -t mysqlrestapi:latest .
 
-      - name: Login to GitHub Container Registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    - name: Login to GitHub Container Registry
+      run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Push Docker image to GitHub Container Registry
-        run: docker push ghcr.io/tafehi/mysqlrestapi:latest
+    - name: Push Docker image to GitHub Container Registry
+      run: |
+        lowercase_registry=$(echo "${{ env.GITHUB_REGISTRY }}" | tr '[:upper:]' '[:lower:]')
+        docker tag mysqlrestapi:latest "${lowercase_registry}/mysqlrestapi:latest"
+        docker push "${lowercase_registry}/mysqlrestapi:latest"
+
 
 
   send-to-aws:
