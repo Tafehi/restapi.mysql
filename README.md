@@ -145,5 +145,5 @@ meaning that if all stages are successful then the dockerized application will b
 
 When the application is running smoothly, it can be tested via either postman or Insomnia. In below you can see
 the final response received from insomnia on `http://localhost:8080/students`
-![insomniaResponse](insomniaResponse.png)
+![insomnia_response.png](insomnia_response.png)
 
