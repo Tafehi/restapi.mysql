@@ -90,9 +90,6 @@ jobs:
 
   package:
     runs-on: ubuntu-24.04
-    needs:
-      - test
-      - code_style
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
