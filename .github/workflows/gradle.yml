@@ -132,17 +132,18 @@ jobs:
           name: application
           path: build/libs/mysqlrestapi-1.0.0.jar
 
-      - name: Build Docker image
-        run: docker build -t ghcr.io/tafehi/mysqlrestapi:latest .
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Login to GitHub Container Registry
-        run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }}
-
-      - name: Push Docker image to GitHub Container Registry
+      - name: Build and tag Docker image
         run: |
-          lowercase_registry=$(echo "${{ env.GITHUB_REGISTRY }}" |
-          tr '[:upper:]' '[:lower:]') docker tag mysqlrestapi:latest "${lowercase_registry}/mysqlrestapi:latest" 
-          docker push "${lowercase_registry}/mysqlrestapi:latest"
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/mysqlrestapi:latest .
+          docker tag ${{ secrets.DOCKER_USERNAME }}/mysqlrestapi:latest ${{ secrets.DOCKER_USERNAME }}/mysqlrestapi:${{ github.sha }}
+
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/mysqlrestapi:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/mysqlrestapi:${{ github.sha }}
 
 
   send-to-aws:
@@ -175,5 +176,7 @@ jobs:
 
       - name: Push Docker image to ECR
         run: docker push ${{ secrets.AWS_ECR_REGISTRY }}/mysqlrestapi:latest
+
+
 
 
