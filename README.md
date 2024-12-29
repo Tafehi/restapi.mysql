@@ -22,7 +22,7 @@ In order to create a new project two most methods are:
 2. from cmd terminal.
 
 ### Form website:
-Go to the `https://micronaut.io/launch/` and by selecting your desire configuration click on generate. Then download a .zip file and open it via your desire code editor such as `
+Go to the [micronaut.io/launch/](https://micronaut.io/launch/) and by selecting your desire configuration click on generate. Then download a .zip file and open it via your desire code editor such as `
 IntelliJ IDEA`
 
 ### From terminal:
@@ -134,9 +134,9 @@ This stage take the package and create a docker file. This step read the Dockerf
 
 **Push To Docker Hub Registry**
 When the docker is created at the dockerized step and the image is created via Github action,
-it will be sent and stored in my personal docker hub account,`https://hub.docker.com/u/tafehi`. The image for this project is stored at
-`https://hub.docker.com/r/tafehi/mysqlrestapi`. Full documentation on how to connect to different registry can be found
-in `https://github.com/docker/login-action`.
+it will be sent and stored in my personal docker hub account,[hub.docker.com/tafehi](https://hub.docker.com/u/tafehi). The image for this project is stored at
+[hub.docker.com/tafehi/mysqlrestapi](https://hub.docker.com/r/tafehi/mysqlrestapi). Full documentation on how to connect to different registry can be found
+in [https://github.com/docker/login-action](https://github.com/docker/login-action).
 At the last stage `Send to AWS` the created image will be sent the image registry in `AWS` named `ECR`.
 
 
