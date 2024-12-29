@@ -1,12 +1,25 @@
-# restapi.mysql
+# RESTful API via kotlin and Micronaut
+This repo contains kotlin code for creating a RESTful API application in order to connect to Mysql database via micronaut.
+## Project Topology and structure
 
-# RESTful API via kotlin
-This repo contains code for creating a kotlin application in order to connect to Mysql DB via micronaut.
+In below, you can find the structure of the project. By pushing the code and running the pipeline via
+Github action the project will do the following steps as illustrated in below:
+    1. Compile the code.
+    2. Test the code.
+    3. Check for the code formating.
+    4. Package the project.
+    5. Create a Docker from the `JAR` file via `Dockerfile`.
+    6. Push the image to the `Docker Hub` as public repo.
+    7. Send the created image from `Docker Hub` to `AWS ECR`.
 
-# How to create the project for Micronaut
+![complete_topology](complete_topology.png)
 
-to start a project using kotlin and micronaut it is essential to install micronaut on your system.
-In order to create a new project two most methods are from web initializer and from cmd.
+## How to create the project for Micronaut
+
+To start a project using kotlin and micronaut it is essential to install micronaut on your system.
+In order to create a new project two most methods are:
+1. from web initializer 
+2. from cmd terminal.
 
 ### Form website:
 Go to the `https://micronaut.io/launch/` and by selecting your desire configuration click on generate. Then download a .zip file and open it via your desire code editor such as `
@@ -32,7 +45,8 @@ stages:
     - compile
     - test
     - code style -> sub task for test stage
-    - create docker
+    - package
+    - dockerize
     - send to aws
 ```
 
@@ -99,7 +113,7 @@ code_style:
 
 **Package**
 
-Finally, the `package` step uses the [ShadowJar](https://github.com/johnrengelman/shadow) Gradle plugin to compile a "fat jar" with all the dependencies included.
+Finally, the `package` step uses the [ShadowJar](https://github.com/johnrengelman/shadow) Gradle plugin to compile a `JAR` with all the dependencies included.
 This file then gets uploaded as an artifact of the build process and stored for 1 day.
 
 ```yaml
@@ -112,38 +126,39 @@ package:
       - build/libs/*.jar
     expire_in: 1 day
 ```
-**Create Docker**
+**Dockerize**
 
 This stage take the package and create a docker file. This step read the Dockerfile content and create a docker image
-base on that. The base image of the docker is `openjdk:21-slim`.
-Dockerized application can be found at: `https://gitlab.com/sotware.development/restapi.mysql/container_registry`
-which is a local container registry for gitlab. At the last stage `Send to AWS` which sends the docker to the ECR in AWS the
-docker image will be pushed from this local container registry to the `ECR AWS`.
+ accordingly. The base image of the docker is `openjdk:21-slim`.
+
 
 **Push To Docker Hub Registry**
-When the docker is created at the dockerized step and the image is created via github action,
-it will be sent and stored in my personal docker hub account,`https://hub.docker.com/u/tafehi`. This image is stored at
+When the docker is created at the dockerized step and the image is created via Github action,
+it will be sent and stored in my personal docker hub account,`https://hub.docker.com/u/tafehi`. The image for this project is stored at
 `https://hub.docker.com/r/tafehi/mysqlrestapi`. Full documentation on how to connect to different registry can be found
 in `https://github.com/docker/login-action`.
+At the last stage `Send to AWS` the created image will be sent the image registry in `AWS` named `ECR`.
 
 
 **Send to AWS**
 
-At the last stage the dockerized application will be sent into AWS ECR for being run on any platform.
+At the last stage the dockerized application will be sent into `AWS ECR` for being run on any platform.
 
 **CI/CD variables**
 
-To avoid adding credentials to the all credentials for both application to connect to mysql DB and also for AWS are
-stored as environmental variables in CI/CD secrets and variables. Please update your required credentials in your CI/CD pipeline.
+To avoid adding credentials to the all credentials for both application to connect to `mysql database` and also for `AWS` are
+stored as environmental variables in CI/CD secrets and variables. Please update your required credentials in your `Github Action`.
 
 As shown in ci/cd pipeline status sending the docker file to the aws is a manual step,
 meaning that if all stages are successful then the dockerized application will be sent when the play button is clicked.
 
 ![cicd_pipeline](cicd_pipeline.png)
 
+
 **API Response via Postman/Insomnia**
 
-When the application is running smoothly, it can be tested via either postman or Insomnia. In below you can see
-the final response received from insomnia on `http://localhost:8080/students`
+When the application is running smoothly, it can be tested via either postman or Insomnia. In below, you can see
+the final response received from insomnia on `http://localhost:8080/students`.
+
 ![insomnia_response.png](insomnia_response.png)
 
