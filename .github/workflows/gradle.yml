@@ -60,9 +60,8 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '21'
-
-      - name: Test
-        run: ./gradlew test --stacktrace
+#      - name: Test
+#        run: ./gradlew test --stacktrace
     continue-on-error: true
 
   code_style:

@@ -122,8 +122,9 @@ docker image will be pushed from this local container registry to the `ECR AWS`.
 
 **Push To Docker Hub Registry**
 When the docker is created at the dockerized step and the image is created via github action,
-it will be sent and stored in my personal docker hub account,`https://hub.docker.com/u/tafehi`. This image is stored at ``
-Full documentation on how to connect to different registry can be found in `https://github.com/docker/login-action`.
+it will be sent and stored in my personal docker hub account,`https://hub.docker.com/u/tafehi`. This image is stored at
+`https://hub.docker.com/r/tafehi/mysqlrestapi`. Full documentation on how to connect to different registry can be found
+in `https://github.com/docker/login-action`.
 
 
 **Send to AWS**
