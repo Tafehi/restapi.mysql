@@ -39,6 +39,7 @@ mn create-app --build=gradle_kotlin --jdk=21 --lang=kotlin --test=junit --featur
 ```
 when seeing `| Application created at ~/personal/kotlin/micronautKotlin` is means that the project is created successfully.
 # Kotlin Build Pipeline
+To find the pipeline steps and find their status please click on [Github/Action](https://github.com/Tafehi/restapi.mysql/actions)
 The following projects has five different stages:
 ```yaml
 stages:
